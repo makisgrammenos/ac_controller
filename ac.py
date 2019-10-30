@@ -3,6 +3,7 @@ import os
 import sys
 
 def broadcast(IP,PORT,MSG):
+
     sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
     sock.sendto(MSG,(IP,PORT))
 def turnOn(IP,PORT):
@@ -16,14 +17,47 @@ def turnOff(IP,PORT):
 #    MSG = '<msg msgid="SetMessage" type="Control" seq="1"><SetMessage><SetTemp>74</SetTemp></SetMessage></msg'
 def setTemp(IP,PORT):
     temp = CtoF() # convert Celsius degrees to F degrees
+    if temp ==0:
+        return None
     MSG ='<msg msgid="SetMessage" type="Control" seq="12345"><SetMessage><SetTemp>{}</SetTemp></SetMessage></msg>'.format(str(temp))
+    broadcast(IP,PORT,MSG)
+def setWindirection(IP,PORT):
+    print "Please select WindSpeed"
+    print "[1] Low"
+    print "[2] Medium"
+    print "[3] High"
+    print "To return to main menu  press [0]"
+    while True:
+        try:
+            speed = input("Select [1-3]: ")
+        except NameError:
+            print "Error"
+        if speed == 0 :
+            return None
+        if (speed>=1) and (speed<=3):
+            if speed == 1:
+                speed = 'Low'
+                break
+            elif speed == 2:
+                speed = 'Medium'
+                break
+            else:
+                speed = 'High'
+                break
+        else:
+            print "Allowed values from 1-3"
+        
+    MSG = '<msg msgid="SetMessage" type="Control" seq="12345"><SetMessage><WindSpeed>{}</WindSpeed></SetMessage></msg>'.format(str(speed))
     broadcast(IP,PORT,MSG)
 
 #convert Celsius to Fahrenheit
 def CtoF():
     while True:
         try:
+            print "To return to main menu pres [0]"
             temp_x = input('Select Temperature (16 - 31 C): ')
+            if temp_x == 0:
+                return 0
             if (temp_x>=16) and (temp_x<=31):
                 break 
             else:
@@ -97,6 +131,8 @@ while True:
             break
         except NameError:
             print "Error. Please input only numbers"
+        except:
+            print 'Error'
     if x == 1:
         turnOn(IP,PORT)
     elif x ==2:
@@ -104,6 +140,8 @@ while True:
     elif x == 3 :
         setTemp(IP,PORT)
     elif x == 0:
-        sys.exit()  
+        sys.exit()
+    elif x ==4:
+        setWindirection(IP,PORT)  
     else:
         print "Error.Please choose from 0 - 3"
