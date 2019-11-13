@@ -125,6 +125,7 @@ while True:
     print "[1] Turn ON AC"
     print "[2] Turn OFF AC"
     print "[3] Adjust Temperature"
+    print "[4] Change wind direction"
     while True:
         try:
             x = input("Please select: ")
