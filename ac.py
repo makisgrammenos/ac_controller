@@ -1,15 +1,15 @@
 import socket
 import os
 import sys
+import json
 
 def broadcast(IP,PORT,MSG):
-
+    print "test"
     sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
     sock.sendto(MSG,(IP,PORT))
 def turnOn(IP,PORT):
     MSG = '<msg msgid="SetMessage" type="Control" seq="1"><SetMessage><TurnOn>on</TurnOn></SetMessage></msg>'
-    broadcast(IP,PORT,MSG)
-    
+    broadcast(IP,PORT,MSG)    
 def turnOff(IP,PORT):
     MSG = '<msg msgid="SetMessage" type="Control" seq="12345"><SetMessage><TurnOn>off</TurnOn></SetMessage></msg>'
     broadcast(IP,PORT,MSG)
@@ -72,22 +72,38 @@ def CtoF():
 
     temp = tempF[tempC.index(temp_x)]
     return temp
-
-
-
-
-
+def SetMode(IP,PORT):
+    while True:
+        try:
+            print "To return to main menu press [0]"
+            select = input('Select mode \n [1] Cool \n [2] Heat\n [3] Fan')
+            if select ==  1 :
+                mode = 'cool'
+            elif select == 2 :
+               mode = 'heat'
+            elif select == 3 :
+                mode = 'fan'
+            else :
+                NameError
+            #MSG = '<msg msgid="SetMessage" type="Control" seq="1355"><SetMessage><BaseMode>{}</BaseMode></SetMessage></msg>'.format(str(mode))
+            #broadcast(IP,PORT,MSG)
+            #break
+        except NameError:
+            print "Error .Allowed inputs [1-3]"  
 
 
 # main code
 print "Welcome to Morric AC controler "
 useSettings = False
-if os.path.isfile('./settings.txt') == True:
+if os.path.isfile('./settings.json') == True:
+    x = open('settings.json','r')
     print "Following settings have been found"
-    settings = open("settings.txt", "r")
-    print "IP address: ", settings.readline()
-    print "Port: ", settings.readline()
-    settings = settings.close()
+    setting = open("settings.json", "r")
+    settings = json.load(x)
+    ip2 = str((settings['info']['IP']))
+    port2 = int((settings['info']['PORT']))
+    print "IP address: ", ip2
+    print "Port: ", port2
     while True:
         x = raw_input("Do you want to use this settings? [Y/n]")
         if (x=="Y" ) or (x=="y" ):
@@ -104,20 +120,21 @@ if useSettings == False:
     while True:
         save = raw_input("Do you want to save settings? [Y/N] \n")
         if (save =="Y") or (save =="y"):
-            settings = open("settings.txt","w+")
-            settings.write(IP)
-            settings.write('\n')
-            settings.write(str(PORT))
-            settings.close()
-            
+            settings =  {}
+            settings['info'] ={
+                'IP' : IP,
+                'PORT': PORT
+            }
+            with open('settings.json','w') as x :
+                json.dump(settings,x)
             break
         elif (save =="N") or (save =="n"):
             
             break
 else:
-    settings = open("settings.txt","r")
-    IP = settings.readline()
-    PORT = int(settings.readline())
+    #settings = open("settings.txt","r")
+    IP =  ip2
+    PORT = port2
 while True:
     
     print "========= Please choose a function from the menu ========="
@@ -143,6 +160,8 @@ while True:
     elif x == 0:
         sys.exit()
     elif x ==4:
-        setWindirection(IP,PORT)  
+        setWindirection(IP,PORT)
+    elif x == 5 :
+        SetMode(IP,PORT)  
     else:
         print "Error.Please choose from 0 - 3"
