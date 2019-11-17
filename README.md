@@ -5,6 +5,9 @@ A simple script to control an  (already setted up) Morris air-condition through 
 Script is in early development stages
 
 Big thanks to user Pphenriques3000 from  Home Assistant Community forum who discovered how to control MORRIS Air condition using UDP packets
+
+
+
 ======== Latest Update =========
 
 Changing the method to save the IP and PORT 
