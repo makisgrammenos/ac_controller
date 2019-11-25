@@ -8,8 +8,3 @@ Script is in early development stages
 
 
 
-##======== Latest Update =========
-
-Changing the method to save the IP and PORT 
-Previous versions were using txt files to save IP and PORT.
-From now on all the data will be saved using the JSON file format
