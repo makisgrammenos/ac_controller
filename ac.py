@@ -3,13 +3,24 @@ import os
 import sys
 import json
 
+def log(IP,MSG,PORT):
+    file_save = open('log.json','w')
+    log_output = {}
+    log_output['Activity'] = {
+        'IP Address': IP,
+        'PORT':  PORT,
+        'COMMAND':MSG
+    }
+    with open('log.json','w') as x:
+        json.dump(log_output,x)
 def broadcast(IP,PORT,MSG):
-    print "test"
+    
     sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
     sock.sendto(MSG,(IP,PORT))
 def turnOn(IP,PORT):
     MSG = '<msg msgid="SetMessage" type="Control" seq="1"><SetMessage><TurnOn>on</TurnOn></SetMessage></msg>'
-    broadcast(IP,PORT,MSG)    
+    broadcast(IP,PORT,MSG) 
+    log(IP,MSG,PORT)   
 def turnOff(IP,PORT):
     MSG = '<msg msgid="SetMessage" type="Control" seq="12345"><SetMessage><TurnOn>off</TurnOn></SetMessage></msg>'
     broadcast(IP,PORT,MSG)
