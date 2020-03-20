@@ -51,26 +51,27 @@ else:
 
 ac = AirCondition(ip,port)
 print ("========= Please choose a function from the menu =========")
-    print ("[0] Exit ")
-    print("[1] Turn ON AC")
-    print ("[2] Turn OFF AC")
-    print ("[3] Adjust Temperature")
-    #print ("[4] Change wind direction")
+print ("[0] Exit ")
+print("[1] Turn ON AC")
+print ("[2] Turn OFF AC")
+print ("[3] Adjust Temperature")
+    #print ("[4] Change wind direction")`
 while True:
     try:
-            z = input("Please select: ")
-            break
-        except NameError:
-            print ("Error. Please input only numbers")
-        except:
-            print ('Error')
+        z = int(input("Please select: "))
+        
+    except NameError:
+        print ("Error. Please input only numbers")
+    except:
+        print ('Error')
     if z == 0:
         
         break
     elif (z ==1):
         ac.TurnOn()
+        
     elif (z ==2):
-        ac.TurnOff
+        ac.TurnOff()
     elif(z ==3):
         ac.setTemp()
     else:

@@ -1,12 +1,11 @@
 import socket
-import os
-import sys
-import json
+
 
 class AirCondition:
     def __init__(self,ip,port):
         self.ip = ip
         self.port = port
+        
     
     def broadcast(ip,port,msg):
         sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
